@@ -91,22 +91,30 @@ class _ProductsState extends State<Products> {
         child: _isLoading
             ? const Center(child: CircularProgressIndicator())
             : !_isLoading && _products.isEmpty
-                ? const NotFoundWidget(text: "Oops! No products found yet.")
+                ?  const NotFoundWidget(text: "Oops! No products found yet.",textColor: Colors.white)
                 : SingleChildScrollView(
                     child: Column(
                       children: [
                         buildWelcomeView(localTheme),
-                        Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30),
-                            ),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minHeight: MediaQuery.of(context).size.height,
+                            minWidth: MediaQuery.of(context).size.width,
+                            maxHeight: double.infinity,
+                            maxWidth: double.infinity,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: buildProductsGridView(context),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: buildProductsGridView(context),
+                            ),
                           ),
                         ),
                       ],
@@ -146,8 +154,14 @@ class _ProductsState extends State<Products> {
               ),
             ],
           ),
-           CircleAvatar(
-            child: Icon(Icons.person_2_outlined,color: localTheme.colorScheme.secondary),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, "/settings");
+            },
+            child: CircleAvatar(
+              child: Icon(Icons.person_2_outlined,
+                  color: localTheme.colorScheme.secondary),
+            ),
           ),
         ],
       ),
@@ -166,11 +180,12 @@ class _ProductsState extends State<Products> {
       itemCount: _products.length,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
+        var cardRadius = 10.0;
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 0.1,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(cardRadius)),
+          elevation: 0.4,
           child: GestureDetector(
             onTap: () {
               Navigator.push(
@@ -189,9 +204,9 @@ class _ProductsState extends State<Products> {
                   height: 150,
                   width: double.infinity,
                   child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(cardRadius),
+                      topRight: Radius.circular(cardRadius),
                     ),
                     child: CachedNetworkImage(
                       imageUrl: "$imageUrl/${_products[index].imageUrl}",
@@ -267,25 +282,8 @@ class _ProductsState extends State<Products> {
               child: const Text("Cancel"),
             ),
             TextButton(
-              onPressed: () async {
-                var url = "$baseUrl/products/$id";
-                var token = await getToken();
-                var response = await http.delete(Uri.parse(url), headers: {
-                  HttpHeaders.authorizationHeader: "bearer $token"
-                });
-
-                if (response.statusCode == 200) {
-                  setState(() {
-                    _products =
-                        _products.where((element) => element.id != id).toList();
-                  });
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Unable to delete product"),
-                  ));
-                }
-
-                Navigator.of(context).pop();
+              onPressed: () {
+                _deleteProduct(id, context);
               },
               style: TextButton.styleFrom(
                 foregroundColor: Colors.red,
@@ -297,33 +295,60 @@ class _ProductsState extends State<Products> {
       },
     );
   }
+
+  void _deleteProduct(String id, BuildContext context) async {
+    var url = "$baseUrl/products/$id";
+    var token = await getToken();
+    var response = await http.delete(Uri.parse(url),
+        headers: {HttpHeaders.authorizationHeader: "bearer $token"});
+
+    Navigator.of(context).pop();
+    showLoadingDialog(context);
+
+    if (response.statusCode == 200) {
+      setState(() {
+        _products = _products.where((element) => element.id != id).toList();
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Unable to delete product"),
+      ));
+    }
+
+    Navigator.of(context).pop();
+  }
 }
 
 class NotFoundWidget extends StatelessWidget {
   final String text;
+  final Color textColor;
 
   const NotFoundWidget({
     super.key,
     required this.text,
+    required this.textColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    var textColor = Colors.white;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
+          Icon(
             FontAwesomeIcons.boxOpen,
             size: 100,
+            color: textColor,
           ),
           const SizedBox(
             height: 16,
           ),
           Text(
             text,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 20,
+              color: textColor,
               fontWeight: FontWeight.bold,
             ),
           ),

@@ -59,7 +59,6 @@ class _HomeState extends State<Home> {
 
       bottomNavigationBar: Container(
         decoration:  BoxDecoration(
-          color: Colors.white,
           border: Border(
             top: BorderSide(
               color: Colors.grey.shade300,
@@ -72,7 +71,7 @@ class _HomeState extends State<Home> {
           backgroundColor: Colors.transparent,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.home),
+              icon: Icon(FontAwesomeIcons.house),
               label: 'Home',
             ),
             BottomNavigationBarItem(

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:classifieds_app/config.dart';
+import 'package:classifieds_app/screens/new_product.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -40,11 +41,7 @@ class _ProductDetailState extends State<ProductDetail> {
             return <Widget>[
               SliverAppBar(
                 expandedHeight: 250.0,
-                actions: <Widget>[
-                  IconButton(
-                      onPressed: () {},
-                      icon: const FaIcon(FontAwesomeIcons.share))
-                ],
+                actions: <Widget>[],
                 floating: true,
                 pinned: false,
                 flexibleSpace: FlexibleSpaceBar(
@@ -134,6 +131,51 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
               ],
             ),
+          ),
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              MaterialButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return NewProduct(product: product,);
+                      },
+                    ),
+                  );
+                },
+                textColor: Theme.of(context).colorScheme.primary,
+                color: Colors.blue.shade100,
+                elevation: 0,
+                child: Row(
+                  children: const [
+                    Icon(Icons.edit),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text("Edit"),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Row(
+                  children: const [
+                    Icon(Icons.share),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text("Share"),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),

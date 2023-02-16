@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:classifieds_app/models/product.dart';
 import 'package:classifieds_app/utils/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,13 +13,16 @@ import '../widgets/form_group.dart';
 import 'package:http/http.dart' as http;
 
 class NewProduct extends StatefulWidget {
-  const NewProduct({Key? key}) : super(key: key);
+  final Product? product;
+
+  const NewProduct({Key? key, this.product}) : super(key: key);
 
   @override
-  State<NewProduct> createState() => _NewProductState();
+  State<NewProduct> createState() => _NewProductState(this.product);
 }
 
 class _NewProductState extends State<NewProduct> {
+  final Product? product;
   final _nameController = TextEditingController(text: "");
   final _descriptionController = TextEditingController(text: "");
   final _priceController = TextEditingController(text: "");
@@ -34,6 +38,8 @@ class _NewProductState extends State<NewProduct> {
 
   XFile? image;
   final ImagePicker picker = ImagePicker();
+
+  _NewProductState(this.product);
 
   Future getImage(ImageSource media) async {
     var img = await picker.pickImage(source: media);
@@ -75,8 +81,15 @@ class _NewProductState extends State<NewProduct> {
 
   void _saveProduct(context) async {
     var token = await getToken();
-    Uri uri = Uri.parse('$baseUrl/products');
-    http.MultipartRequest request = http.MultipartRequest('POST', uri);
+
+    var method = 'POST';
+    var url = '$baseUrl/products';
+    if (product != null) {
+      method = "PUT";
+      url = '$baseUrl/products/${product!.id}';
+    }
+    Uri uri = Uri.parse(url);
+    http.MultipartRequest request = http.MultipartRequest(method, uri);
     // Add the image file to the request.
     request.files.add(await http.MultipartFile.fromPath('image', image!.path));
     request.fields["name"] = _nameController.text;
@@ -101,7 +114,7 @@ class _NewProductState extends State<NewProduct> {
     final response = await request.send();
     Navigator.pop(context);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Navigator.pop(context, response);
+      Navigator.pushReplacementNamed(context, "/products");
     } else {
       var message = "Unable save product, please try again";
       ScaffoldMessenger.of(context).showSnackBar(
@@ -114,6 +127,12 @@ class _NewProductState extends State<NewProduct> {
 
   @override
   Widget build(BuildContext context) {
+    _nameController.text = product!.name;
+    _selectedCategory = product!.category.id;
+    _priceController.text = product!.price.toString();
+    _descriptionController.text = product!.shorDescription;
+    selectedDate = DateTime.parse(product!.manufacturingDate);
+
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
@@ -133,7 +152,7 @@ class _NewProductState extends State<NewProduct> {
               ),
             )
           : SingleChildScrollView(
-            child: Padding(
+              child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +204,6 @@ class _NewProductState extends State<NewProduct> {
                             }).toList(),
                             defaultValue: _selectedCategory,
                             onChange: (newValue) {
-                              print(newValue);
                               setState(() {
                                 _selectedCategory = newValue!;
                               });
@@ -253,15 +271,19 @@ class _NewProductState extends State<NewProduct> {
                               const SizedBox(
                                 width: 16,
                               ),
-                              image != null
+                              image != null || product != null
                                   ? ClipRRect(
                                       borderRadius: BorderRadius.circular(8),
-                                      child: Image.file(
-                                        //to show image, you type like this.
-                                        File(image!.path),
-                                        fit: BoxFit.cover,
-                                        height: 100,
-                                      ),
+                                      child: image == null && product != null
+                                          ? Image.network(
+                                              "$imageUrl/${product!.imageUrl}",
+                                              height: 100)
+                                          : Image.file(
+                                              //to show image, you type like this.
+                                              File(image!.path),
+                                              fit: BoxFit.cover,
+                                              height: 100,
+                                            ),
                                     )
                                   : const Text(
                                       "No Image",
@@ -278,10 +300,11 @@ class _NewProductState extends State<NewProduct> {
                             width: double.infinity,
                             child: ElevatedButton(
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(
-                                    Colors.white),
-                                padding:
-                                    MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                                padding: MaterialStateProperty.all<
+                                    EdgeInsetsGeometry>(
                                   const EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 20),
                                 ),
@@ -299,7 +322,8 @@ class _NewProductState extends State<NewProduct> {
                                     ? "Select Date"
                                     : formatDate(selectedDate!.toString()),
                                 style: TextStyle(
-                                    color: Theme.of(context).colorScheme.primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -318,12 +342,13 @@ class _NewProductState extends State<NewProduct> {
                                       }
                                     },
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(
-                                    Theme.of(context).primaryColor),
-                                padding:
-                                    MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                        const EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 20)),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Theme.of(context).primaryColor),
+                                padding: MaterialStateProperty.all<
+                                        EdgeInsetsGeometry>(
+                                    const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 20)),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -340,7 +365,7 @@ class _NewProductState extends State<NewProduct> {
                   ],
                 ),
               ),
-          ),
+            ),
     );
   }
 }
