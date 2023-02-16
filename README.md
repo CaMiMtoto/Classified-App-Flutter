@@ -1,17 +1,20 @@
-# classifieds_app
+# Classifieds App
 
-Classifieds App
+This is a simple classifieds app built with  flutter. it uses nodejs as backend and mongodb as database.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- [x] User Authentication
+- [x] User Profile
+- [x] User Dashboard
+- [x] Product Listing
+- [x] Product Detail
+- [x] Product Creation
+- [x] Product Update
+- [x] Product Delete
+- [x] Product categories listing
+- [x] Product categories creation
+- [x] Product categories update
+- [x] Product categories delete
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# Classified-App-Flutter

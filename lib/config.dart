@@ -3,12 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-// const String APP_URL = 'http://localhost:3000';
-// const String APP_URL = 'http://192.168.162.112:3000';
+
 // http://10.0.2.2:3000
 
-
-String appUrl = "https://classified-app-api.herokuapp.com";
+String appUrl = "https://classified.cami.ink";
 String baseUrl = '$appUrl/api';
 String imageUrl = '$appUrl/images';
 

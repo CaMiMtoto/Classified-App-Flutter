@@ -1,11 +1,9 @@
 import 'package:classifieds_app/models/product.dart';
-import 'package:classifieds_app/utils/auth.dart';
 import 'package:classifieds_app/screens/home.dart';
 import 'package:classifieds_app/screens/register.dart';
 import 'package:classifieds_app/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:quick_actions/quick_actions.dart';
 
 import 'screens/categories.dart';

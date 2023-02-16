@@ -26,7 +26,6 @@ class _SettingsState extends State<Settings> {
 
   void _getUser() {
     getCurrentUser()?.then((value) {
-      print(value);
       setState(() {
         _currentUser = value;
       });
