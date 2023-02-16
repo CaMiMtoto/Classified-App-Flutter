@@ -9,6 +9,7 @@ import 'package:classifieds_app/screens/product_detail.dart';
 import 'package:classifieds_app/utils/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../models/product.dart';
 import '../utils/common.dart';
@@ -25,7 +26,9 @@ class Products extends StatefulWidget {
 class _ProductsState extends State<Products> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+      GlobalKey<RefreshIndicatorState>(
+    debugLabel: "RefreshIndicator",
+  );
 
   List<Product> _products = [];
   var _isLoading = false;
@@ -73,202 +76,179 @@ class _ProductsState extends State<Products> {
   @override
   Widget build(BuildContext context) {
     var localTheme = Theme.of(context);
-    return SafeArea(
-      child: RefreshIndicator(
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor:
+          _isLoading ? Colors.white : localTheme.colorScheme.primary,
+      appBar: AppBar(
+        title: const Text("Classifieds App"),
+        elevation: 0,
+        centerTitle: true,
+      ),
+      body: RefreshIndicator(
         onRefresh: _handleRefresh,
         key: _refreshIndicatorKey,
-        child: Scaffold(
-          key: _scaffoldKey,
-          body: _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : !_isLoading && _products.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            FontAwesomeIcons.boxOpen,
-                            size: 100,
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            "Oops! No products found yet.",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : SingleChildScrollView(
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : !_isLoading && _products.isEmpty
+                ? const NotFoundWidget(text: "Oops! No products found yet.")
+                : SingleChildScrollView(
                     child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 16),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.grey.shade200,
-                                  Colors.grey.shade100,
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Hello !',
-                                      style: TextStyle(
-                                          color: Colors.grey.shade900,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      _currentUser != null
-                                          ? _currentUser!.name
-                                          : '',
-                                      style: TextStyle(
-                                          color: Colors.grey.shade900,
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                const CircleAvatar(
-                                  child: Icon(Icons.person_2_outlined),
-                                ),
-                              ],
+                      children: [
+                        buildWelcomeView(localTheme),
+                        Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              top: 16.0,
-                              left: 16,
-                              right: 16,
-                            ),
-                            child: Expanded(
-                                child: GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount:
-                                    MediaQuery.of(context).size.width > 480
-                                        ? 4
-                                        : 2,
-                                crossAxisSpacing: 8,
-                                mainAxisSpacing: 8,
-                                childAspectRatio: 0.6,
-                              ),
-                              shrinkWrap: true,
-                              itemCount: _products.length,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return Card(
-                                  margin: const EdgeInsets.symmetric(vertical: 8),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  elevation: 0.1,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ProductDetail(
-                                            product: _products[index],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          height: 150,
-                                          width: double.infinity,
-                                          child: ClipRRect(
-                                            borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10),
-                                            ),
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                                  "$imageUrl/${_products[index].imageUrl}",
-                                              fit: BoxFit.cover,
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 8,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8),
-                                          child: Wrap(
-                                            runSpacing: 4,
-                                            children: [
-                                              Text(
-                                                _products[index].name,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 16,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 2,
-                                              ),
-                                              const SizedBox(
-                                                height: 16,
-                                              ),
-                                              Text(
-                                                "RF ${numberFormat(_products[index].price)}",
-                                                style: const TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              Text(
-                                                formatDate(_products[index]
-                                                    .manufacturingDate),
-                                                style: const TextStyle(
-                                                    color: Colors.grey),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 8,
-                                        ),
-                                      ],
-                                    ),
-                                    onLongPress: () {
-                                      confirmDeletion(
-                                          context, _products[index].id);
-                                    },
-                                  ),
-                                );
-                              },
-                            )),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: buildProductsGridView(context),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
                   ),
-        ),
       ),
+    );
+  }
+
+  Container buildWelcomeView(ThemeData localTheme) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 32, top: 32),
+      decoration: const BoxDecoration(
+        color: Colors.transparent,
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Hello !',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                _currentUser != null ? _currentUser!.name : '',
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+           CircleAvatar(
+            child: Icon(Icons.person_2_outlined,color: localTheme.colorScheme.secondary),
+          ),
+        ],
+      ),
+    );
+  }
+
+  GridView buildProductsGridView(BuildContext context) {
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: MediaQuery.of(context).size.width > 480 ? 4 : 2,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+        childAspectRatio: 0.6,
+      ),
+      shrinkWrap: true,
+      itemCount: _products.length,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 0.1,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductDetail(
+                    product: _products[index],
+                  ),
+                ),
+              );
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 150,
+                  width: double.infinity,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: "$imageUrl/${_products[index].imageUrl}",
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Wrap(
+                    runSpacing: 4,
+                    children: [
+                      Text(
+                        _products[index].name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        "RF ${numberFormat(_products[index].price)}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        formatDate(_products[index].manufacturingDate),
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+              ],
+            ),
+            onLongPress: () {
+              confirmDeletion(context, _products[index].id);
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -315,6 +295,40 @@ class _ProductsState extends State<Products> {
           ],
         );
       },
+    );
+  }
+}
+
+class NotFoundWidget extends StatelessWidget {
+  final String text;
+
+  const NotFoundWidget({
+    super.key,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            FontAwesomeIcons.boxOpen,
+            size: 100,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

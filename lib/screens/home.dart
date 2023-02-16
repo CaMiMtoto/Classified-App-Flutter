@@ -85,7 +85,6 @@ class _HomeState extends State<Home> {
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
 
           onTap: (index) {
             setState(() {

@@ -72,6 +72,5 @@ Future<List<Product>> fetchProducts(String? categoryId) async {
     HttpHeaders.authorizationHeader: "bearer $token",
   });
   var body = response.body;
-  print(body);
   return compute(parseProducts, body);
 }
