@@ -20,7 +20,8 @@ class TextFormGroup extends StatelessWidget {
     this.maxLines,
     this.textInputType,
     this.obscureText = false,
-    this.enabled, this.onTap,
+    this.enabled,
+    this.onTap,
   });
 
   @override
@@ -30,7 +31,10 @@ class TextFormGroup extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(fontWeight: FontWeight.w600),
+          style:  TextStyle(
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
         const SizedBox(
           height: 8,
@@ -43,11 +47,13 @@ class TextFormGroup extends StatelessWidget {
           obscureText: obscureText,
           enabled: enabled,
           decoration: InputDecoration(
-            border: const OutlineInputBorder(borderSide: BorderSide.none),
+            border: const OutlineInputBorder(
+              borderSide: BorderSide.none
+            ),
             hintText: hintText,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            fillColor: Colors.white,
+            fillColor: Colors.grey.shade100,
             filled: true,
             focusedBorder: OutlineInputBorder(
               borderSide:

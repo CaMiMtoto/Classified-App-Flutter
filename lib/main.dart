@@ -4,13 +4,15 @@ import 'package:classifieds_app/screens/register.dart';
 import 'package:classifieds_app/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quick_actions/quick_actions.dart';
 
 import 'screens/categories.dart';
 import 'screens/product_detail.dart';
 import 'screens/products.dart';
+import 'utils/deeplinks.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 
@@ -20,6 +22,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    initUniLinks(context);
     var appTitle = 'Classifieds App';
     return MaterialApp(
       onGenerateRoute: (settings) {
@@ -37,7 +40,7 @@ class MyApp extends StatelessWidget {
           case '/product-detail':
             return MaterialPageRoute(
               builder: (context) => ProductDetail(
-                product: settings.arguments as Product,
+                productId: settings.arguments as String,
               ),
             );
           default:

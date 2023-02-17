@@ -114,7 +114,7 @@ class _NewProductState extends State<NewProduct> {
     final response = await request.send();
     Navigator.pop(context);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Navigator.pushReplacementNamed(context, "/products");
+      Navigator.pushReplacementNamed(context, "/");
     } else {
       var message = "Unable save product, please try again";
       ScaffoldMessenger.of(context).showSnackBar(
@@ -127,17 +127,16 @@ class _NewProductState extends State<NewProduct> {
 
   @override
   Widget build(BuildContext context) {
-    _nameController.text = product!.name;
-    _selectedCategory = product!.category.id;
-    _priceController.text = product!.price.toString();
-    _descriptionController.text = product!.shorDescription;
-    selectedDate = DateTime.parse(product!.manufacturingDate);
-
+    var primaryColor = Theme.of(context).colorScheme.primary;
+    if (product != null) {
+      _nameController.text = product!.name;
+      _selectedCategory = product!.category.id;
+      _priceController.text = product!.price.toString();
+      _descriptionController.text = product!.shorDescription;
+      selectedDate = DateTime.parse(product!.manufacturingDate);
+    }
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      appBar: AppBar(
-        title: const Text('New Product'),
-      ),
+      backgroundColor: Colors.white,
       body: _isLoading
           ? Center(
               child: Column(
@@ -152,218 +151,257 @@ class _NewProductState extends State<NewProduct> {
               ),
             )
           : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Product',
-                        style: Theme.of(context).textTheme.titleLarge),
-                    const SizedBox(
-                      height: 32,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 150,
+                    decoration: BoxDecoration(color: primaryColor),
+                    child: Center(
+                      child: Text(
+                        'Product',
+                        style: Theme.of(context)
+                            .textTheme
+                            .displaySmall
+                            ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
+                      ),
                     ),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          TextFormGroup(
-                            controller: _nameController,
-                            label: "Name",
-                            hintText: "Product name",
-                            textInputType: TextInputType.text,
-                            maxLines: 1,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Product name is required';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-
-                          // dropdown categories
-                          DropdownFormGroup(
-                            label: "Category",
-                            hintText: "Select Category",
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'This field is required';
-                              }
-                              return null;
-                            },
-                            items: _categories.map((category) {
-                              return DropdownMenuItem(
-                                value: category.id,
-                                child: Text(
-                                  category.name,
-                                  style: TextStyle(color: Colors.grey.shade800),
-                                ),
-                              );
-                            }).toList(),
-                            defaultValue: _selectedCategory,
-                            onChange: (newValue) {
-                              setState(() {
-                                _selectedCategory = newValue!;
-                              });
-                            },
-                          ),
-
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          TextFormGroup(
-                            controller: _priceController,
-                            label: "Price",
-                            hintText: "Product price",
-                            textInputType: TextInputType.number,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'This field is required';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          TextFormGroup(
-                            controller: _descriptionController,
-                            label: "Description",
-                            hintText: "Product description",
-                            maxLines: 3,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "This field is required";
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-
-                          Row(
-                            children: [
-                              GestureDetector(
-                                child: Container(
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.grey.shade300,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  Transform.translate(
+                    offset: const Offset(0, -20),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          children: [
+                            Form(
+                              key: _formKey,
+                              child: Column(
+                                children: [
+                                  TextFormGroup(
+                                    controller: _nameController,
+                                    label: "Name",
+                                    hintText: "Product name",
+                                    textInputType: TextInputType.text,
+                                    maxLines: 1,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Product name is required';
+                                      }
+                                      return null;
+                                    },
                                   ),
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Row(
-                                    children: const [
-                                      Icon(Icons.image),
-                                      Text('From Gallery'),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+
+                                  // dropdown categories
+                                  DropdownFormGroup(
+                                    label: "Category",
+                                    hintText: "Select Category",
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'This field is required';
+                                      }
+                                      return null;
+                                    },
+                                    items: _categories.map((category) {
+                                      return DropdownMenuItem(
+                                        value: category.id,
+                                        child: Text(
+                                          category.name,
+                                          style: TextStyle(
+                                              color: Colors.grey.shade800),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    defaultValue: _selectedCategory,
+                                    onChange: (newValue) {
+                                      setState(() {
+                                        _selectedCategory = newValue!;
+                                      });
+                                    },
+                                  ),
+
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  TextFormGroup(
+                                    controller: _priceController,
+                                    label: "Price",
+                                    hintText: "Product price",
+                                    textInputType: TextInputType.number,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'This field is required';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  TextFormGroup(
+                                    controller: _descriptionController,
+                                    label: "Description",
+                                    hintText: "Product description",
+                                    maxLines: 3,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "This field is required";
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        child: Container(
+                                          height: 100,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.grey.shade300,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Row(
+                                            children: const [
+                                              Icon(Icons.image),
+                                              Text('From Gallery'),
+                                            ],
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          getImage(ImageSource.gallery);
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        width: 16,
+                                      ),
+                                      image != null || product != null
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              child: image == null &&
+                                                      product != null
+                                                  ? Image.network(
+                                                      "$imageUrl/${product!.imageUrl}",
+                                                      height: 100)
+                                                  : Image.file(
+                                                      //to show image, you type like this.
+                                                      File(image!.path),
+                                                      fit: BoxFit.cover,
+                                                      height: 100,
+                                                    ),
+                                            )
+                                          : const Text(
+                                              "No Image",
+                                              style: TextStyle(fontSize: 20),
+                                            ),
                                     ],
                                   ),
-                                ),
-                                onTap: () {
-                                  getImage(ImageSource.gallery);
-                                },
-                              ),
-                              const SizedBox(
-                                width: 16,
-                              ),
-                              image != null || product != null
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: image == null && product != null
-                                          ? Image.network(
-                                              "$imageUrl/${product!.imageUrl}",
-                                              height: 100)
-                                          : Image.file(
-                                              //to show image, you type like this.
-                                              File(image!.path),
-                                              fit: BoxFit.cover,
-                                              height: 100,
-                                            ),
-                                    )
-                                  : const Text(
-                                      "No Image",
-                                      style: TextStyle(fontSize: 20),
+
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.grey.shade100),
+                                        padding: MaterialStateProperty.all<
+                                            EdgeInsetsGeometry>(
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 20),
+                                        ),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                        ),
+                                        elevation:
+                                            MaterialStateProperty.all<double>(
+                                                0),
+                                      ),
+                                      onPressed: () => _selectDate(context),
+                                      child: Text(
+                                        selectedDate == null
+                                            ? "Select Date"
+                                            : formatDate(
+                                                selectedDate!.toString()),
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
-                            ],
-                          ),
-
-                          const SizedBox(
-                            height: 16,
-                          ),
-
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
-                                padding: MaterialStateProperty.all<
-                                    EdgeInsetsGeometry>(
-                                  const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 20),
-                                ),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4),
                                   ),
-                                ),
-                                elevation: MaterialStateProperty.all<double>(0),
-                              ),
-                              onPressed: () => _selectDate(context),
-                              child: Text(
-                                selectedDate == null
-                                    ? "Select Date"
-                                    : formatDate(selectedDate!.toString()),
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontWeight: FontWeight.bold),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      onPressed: _isLoading
+                                          ? null
+                                          : () {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                _saveProduct(context);
+                                              }
+                                            },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Theme.of(context).primaryColor),
+                                        padding: MaterialStateProperty.all<
+                                                EdgeInsetsGeometry>(
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 20)),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                        ),
+                                      ),
+                                      child: const Text("Save Changes"),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: _isLoading
-                                  ? null
-                                  : () {
-                                      if (_formKey.currentState!.validate()) {
-                                        _saveProduct(context);
-                                      }
-                                    },
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Theme.of(context).primaryColor),
-                                padding: MaterialStateProperty.all<
-                                        EdgeInsetsGeometry>(
-                                    const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 20)),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                ),
-                              ),
-                              child: const Text("Save Changes"),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             ),
     );

@@ -74,3 +74,15 @@ Future<List<Product>> fetchProducts(String? categoryId) async {
   var body = response.body;
   return compute(parseProducts, body);
 }
+
+// fetch a product by id from the server
+Future<Product> fetchSingleProduct(String id) async {
+  var uri = '$baseUrl/products/$id';
+  var token = await getToken();
+
+  final response = await http.get(Uri.parse(uri), headers: {
+    HttpHeaders.authorizationHeader: "bearer $token",
+  });
+  var body = response.body;
+  return Product.fromJson(json.decode(body));
+}

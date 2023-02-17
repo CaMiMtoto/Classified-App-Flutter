@@ -1,4 +1,4 @@
-import 'package:classifieds_app/screens/dashboard.dart';
+
 import 'package:classifieds_app/screens/login.dart';
 import 'package:classifieds_app/screens/new_product.dart';
 import 'package:classifieds_app/screens/products.dart';

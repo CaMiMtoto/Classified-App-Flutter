@@ -4,17 +4,16 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:classifieds_app/config.dart';
 import 'package:classifieds_app/models/user.dart';
-import 'package:classifieds_app/screens/new_product.dart';
 import 'package:classifieds_app/screens/product_detail.dart';
 import 'package:classifieds_app/utils/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-
 import '../models/product.dart';
 import '../utils/common.dart';
 
 import 'package:http/http.dart' as http;
+
+import '../widgets/not_found.dart';
 
 class Products extends StatefulWidget {
   const Products({Key? key}) : super(key: key);
@@ -91,7 +90,9 @@ class _ProductsState extends State<Products> {
         child: _isLoading
             ? const Center(child: CircularProgressIndicator())
             : !_isLoading && _products.isEmpty
-                ?  const NotFoundWidget(text: "Oops! No products found yet.",textColor: Colors.white)
+                ? const NotFoundWidget(
+                    text: "Oops! No products found yet.",
+                    textColor: Colors.white)
                 : SingleChildScrollView(
                     child: Column(
                       children: [
@@ -171,7 +172,7 @@ class _ProductsState extends State<Products> {
   GridView buildProductsGridView(BuildContext context) {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: MediaQuery.of(context).size.width > 480 ? 4 : 2,
+        crossAxisCount: MediaQuery.of(context).size.width > 768 ? 3 : 2,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
         childAspectRatio: 0.6,
@@ -192,7 +193,7 @@ class _ProductsState extends State<Products> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ProductDetail(
-                    product: _products[index],
+                    productId: _products[index].id,
                   ),
                 ),
               );
@@ -316,44 +317,5 @@ class _ProductsState extends State<Products> {
     }
 
     Navigator.of(context).pop();
-  }
-}
-
-class NotFoundWidget extends StatelessWidget {
-  final String text;
-  final Color textColor;
-
-  const NotFoundWidget({
-    super.key,
-    required this.text,
-    required this.textColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    var textColor = Colors.white;
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            FontAwesomeIcons.boxOpen,
-            size: 100,
-            color: textColor,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 20,
-              color: textColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

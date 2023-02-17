@@ -44,7 +44,7 @@ class DropdownFormGroup extends StatelessWidget {
             border: const OutlineInputBorder(borderSide: BorderSide.none),
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            fillColor: Colors.white,
+            fillColor: Colors.grey.shade100,
             filled: true,
             focusedBorder: OutlineInputBorder(
               borderSide:

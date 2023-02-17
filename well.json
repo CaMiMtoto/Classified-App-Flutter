@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.codewithjeanpaul.classifieds_app",
+      "sha256_cert_fingerprints": [
+        "48:88:01:9C:2F:44:9C:70:91:48:8F:82:24:88:D7:50:3A:27:26:13:2A:A4:6E:DE:83:3B:BE:EF:4A:24:DA:D3"
+      ]
+    }
+  }
+]
