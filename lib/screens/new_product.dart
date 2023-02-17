@@ -65,6 +65,18 @@ class _NewProductState extends State<NewProduct> {
   void initState() {
     super.initState();
     _loadCategories();
+
+    _initProduct();
+  }
+
+  void _initProduct() {
+    if (product != null) {
+      _nameController.text = product!.name;
+      _selectedCategory = product!.category.id;
+      _priceController.text = product!.price.toString();
+      _descriptionController.text = product!.shorDescription;
+      selectedDate = DateTime.parse(product!.manufacturingDate);
+    }
   }
 
   void _loadCategories() {
@@ -91,7 +103,10 @@ class _NewProductState extends State<NewProduct> {
     Uri uri = Uri.parse(url);
     http.MultipartRequest request = http.MultipartRequest(method, uri);
     // Add the image file to the request.
-    request.files.add(await http.MultipartFile.fromPath('image', image!.path));
+    if (image != null) {
+      request.files.add(await http.MultipartFile.fromPath('image', image!.path));
+    }
+
     request.fields["name"] = _nameController.text;
     request.fields["category"] = _selectedCategory!;
     request.fields["short_description"] = _descriptionController.text;
@@ -128,13 +143,7 @@ class _NewProductState extends State<NewProduct> {
   @override
   Widget build(BuildContext context) {
     var primaryColor = Theme.of(context).colorScheme.primary;
-    if (product != null) {
-      _nameController.text = product!.name;
-      _selectedCategory = product!.category.id;
-      _priceController.text = product!.price.toString();
-      _descriptionController.text = product!.shorDescription;
-      selectedDate = DateTime.parse(product!.manufacturingDate);
-    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: _isLoading

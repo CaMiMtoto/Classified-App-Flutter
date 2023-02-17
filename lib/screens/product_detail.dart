@@ -94,9 +94,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => NewProduct(
-                                      product: product,
-                                    ),
+                                    builder: (context) =>
+                                        NewProduct(product: product),
                                   ),
                                 );
                               },
@@ -110,7 +109,7 @@ class _ProductDetailState extends State<ProductDetail> {
                               onPressed: () async {
                                 final productId = product!.id;
                                 final link =
-                                    'https://classified.cami.ink/products/$productId';
+                                    'https://classified.cami.ink/api/products/$productId';
                                 Share.share('Check out this product: $link',
                                     subject: 'Product Details');
                               },

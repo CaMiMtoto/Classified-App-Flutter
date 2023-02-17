@@ -37,7 +37,7 @@
 
                 <data
                     android:host="classified.cami.ink"
-                    android:scheme="http" />
+                    android:scheme="https" />
                 <data android:scheme="https" />
             </intent-filter>
         </activity>
