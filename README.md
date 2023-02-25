@@ -5,10 +5,10 @@ This is a simple classifieds app built with flutter. it uses nodejs as backend a
 ## Screenshots
 
 
-|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| <img height="200" src="https://live.staticflickr.com/65535/52710208626_b695aa8c12_c.jpg" width="100"/> | <img height="200" src="https://live.staticflickr.com/65535/52710208576_2cd371def7_z.jpg" width="100"/> | <img height="200" src="https://live.staticflickr.com/65535/52709686417_ee63db284c_z.jpg" width="100"/> |
-| <img height="200" src="https://live.staticflickr.com/65535/52710468339_023f41fbef_c.jpg" width="100"/> | <img height="200" src="https://live.staticflickr.com/65535/52710208326_066e3ecb41_c.jpg" width="100"/> | <img height="200" src="https://live.staticflickr.com/65535/52710468134_593012caa8_c.jpg" width="100"/> |
-| <img height="200" src="https://live.staticflickr.com/65535/52710688403_8e201903c3_c.jpg" width="100"/> | <img height="200" src="https://live.staticflickr.com/65535/52710468169_414995fe66_c.jpg" width="100"/> |                                                                                                        |
+
+| <img src="https://live.staticflickr.com/65535/52710208626_b695aa8c12_c.jpg" width="300"/> | <img src="https://live.staticflickr.com/65535/52710208576_2cd371def7_z.jpg" width="300"/> | <img  src="https://live.staticflickr.com/65535/52709686417_ee63db284c_z.jpg" width="300"/> |
+| <img src="https://live.staticflickr.com/65535/52710468339_023f41fbef_c.jpg" width="300"/> | <img src="https://live.staticflickr.com/65535/52710208326_066e3ecb41_c.jpg" width="300"/> | <img  src="https://live.staticflickr.com/65535/52710468134_593012caa8_c.jpg" width="300"/> |
+| <img src="https://live.staticflickr.com/65535/52710688403_8e201903c3_c.jpg" width="300"/> | <img src="https://live.staticflickr.com/65535/52710468169_414995fe66_c.jpg" width="300"/>                                                                                                     
 
 ### Prerequisites
 
