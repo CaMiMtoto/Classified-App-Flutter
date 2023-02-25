@@ -3,13 +3,17 @@
 This is a simple classifieds app built with  flutter. it uses nodejs as backend and mongodb as database.
 
 ## Screenshots
+![Login Page](https://live.staticflickr.com/65535/52710208626_b695aa8c12_c.jpg)
+![Register](https://live.staticflickr.com/65535/52710208576_2cd371def7_z.jpg)
+![Home Products Page](https://live.staticflickr.com/65535/52709686417_ee63db284c_z.jpg)
+![New Product](https://live.staticflickr.com/65535/52710468339_023f41fbef_c.jpg)
+![Categories](https://live.staticflickr.com/65535/52710208326_066e3ecb41_c.jpg)
+![About](https://live.staticflickr.com/65535/52710468134_593012caa8_c.jpg)
 
-![Login Page](https://flic.kr/p/2oiPACs)
-![Register](https://user-images.githubusercontent.com/26361028/83338811-5bf3e080-a2c5-11ea-9b1a-9b2b5b2b5b1f.png)
-![Screenshot_2020-05-30-22-05-16-01](https://user-images.githubusercontent.com/26361028/83338812-5bf3e080-a2c5-11ea-9b1a-9b2b5b2b5b1f.png)
-![Screenshot_2020-05-30-22-05-21-01](https://user-images.githubusercontent.com/26361028/83338813-5c8c7700-a2c5-11ea-9b1a-9b2b5b2b5b1f.png)
-![Screenshot_2020-05-30-22-05-26-01](https://user-images.githubusercontent.com/26361028/83338814-5c8c7700-a2c5-11ea-9b1a-9b2b5b2b5b1f.png)
-![Screenshot_2020-05-30-22-05-31-01](https://user-images.githubusercontent.com/26361028/83338815-5d250d80-a2c5-11ea-9b1a-9b2b5b2b5b1f.png)
+![Settings](https://live.staticflickr.com/65535/52710688403_8e201903c3_c.jpg)
+![New Category](https://live.staticflickr.com/65535/52710468169_414995fe66_c.jpg)
+
+
 
 
 
