@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:classifieds_app/models/category.dart';
 import 'package:classifieds_app/utils/common.dart';
 import 'package:classifieds_app/widgets/form_group.dart';
+import 'package:classifieds_app/widgets/not_found.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -83,42 +84,48 @@ class _CategoriesState extends State<Categories> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: RefreshIndicator(
-                  onRefresh: _handleRefresh,
-                  key: _refreshIndicatorKey,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: _categories.length,
-                          itemBuilder: (context, index) {
-                            var category = _categories[index];
-                            return Container(
-                              margin: const EdgeInsets.only(bottom: 16),
-                              child: ListTile(
-                                onLongPress: () {
-                                  showDeletionConfirmationDialog(
-                                      context, category);
-                                },
-                                leading: CircleAvatar(
-                                  backgroundColor:
-                                      localTheme.colorScheme.primary,
-                                  radius: 20,
-                                  child: Text(category.name[0]),
-                                ),
-                                title: Text(category.name),
-                                subtitle: Text(category.description.toString()),
-                              ),
-                            );
-                          },
-                        ),
+            : !_isLoading && _categories.isEmpty
+                ? NotFoundWidget(
+                    text: 'Oops! No categories found',
+                    textColor: Colors.grey.shade900,
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: RefreshIndicator(
+                      onRefresh: _handleRefresh,
+                      key: _refreshIndicatorKey,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: _categories.length,
+                              itemBuilder: (context, index) {
+                                var category = _categories[index];
+                                return Container(
+                                  margin: const EdgeInsets.only(bottom: 16),
+                                  child: ListTile(
+                                    onLongPress: () {
+                                      showDeletionConfirmationDialog(
+                                          context, category);
+                                    },
+                                    leading: CircleAvatar(
+                                      backgroundColor:
+                                          localTheme.colorScheme.primary,
+                                      radius: 20,
+                                      child: Text(category.name[0]),
+                                    ),
+                                    title: Text(category.name),
+                                    subtitle:
+                                        Text(category.description.toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             showModalBottomSheet(
@@ -253,6 +260,7 @@ class _CategoriesState extends State<Categories> {
       HttpHeaders.authorizationHeader: "bearer $token",
     }).then((response) {
       if (response.statusCode == 201) {
+        resetForm();
         getCategories();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -262,6 +270,11 @@ class _CategoriesState extends State<Categories> {
         );
       }
     });
+  }
+
+  void resetForm() {
+    _nameController.clear();
+    _descriptionController.clear();
   }
 
   Future<http.Response> deleteCategory(String id) async {

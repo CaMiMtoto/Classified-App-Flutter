@@ -240,7 +240,7 @@ class _ProductsState extends State<Products> {
                       Text(
                         "RF ${numberFormat(_products[index].price)}",
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

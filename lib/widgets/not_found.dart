@@ -13,7 +13,6 @@ class NotFoundWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var textColor = Colors.white;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

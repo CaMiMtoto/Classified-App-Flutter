@@ -120,6 +120,10 @@ class _SettingsState extends State<Settings> {
                           color: primaryColor,
                         ),
                         title: const Text('Dark Mode'),
+                        subtitle: const Text(
+                          'Coming soon, stay tuned!',
+                          style: TextStyle(fontSize: 12),
+                        ),
                         trailing: Switch(
                           value: false,
                           onChanged: (bool value) {
@@ -156,7 +160,7 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                       ),
-
+/*
                       ListTile(
                         leading: FaIcon(
                           FontAwesomeIcons.lock,
@@ -167,7 +171,7 @@ class _SettingsState extends State<Settings> {
                           'Protect your account with fingerprint',
                           style: TextStyle(fontSize: 12),
                         ),
-                      ),
+                      ),*/
 
                       ListTile(
                         leading: FaIcon(
@@ -176,7 +180,7 @@ class _SettingsState extends State<Settings> {
                         ),
                         title: const Text('Password'),
                         subtitle: const Text(
-                          'Change your password',
+                          'Change your password,This feature is coming soon',
                           style: TextStyle(fontSize: 12),
                         ),
                       ),
