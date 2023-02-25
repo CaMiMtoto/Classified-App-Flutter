@@ -4,8 +4,8 @@ This is a simple classifieds app built with  flutter. it uses nodejs as backend 
 
 ## Screenshots
 
-![Screenshot_2020-05-30-22-05-05-01](https://user-images.githubusercontent.com/26361028/83338810-5b5b4a00-a2c5-11ea-9b0a-9b2b5b2b5b1f.png)
-![Screenshot_2020-05-30-22-05-11-01](https://user-images.githubusercontent.com/26361028/83338811-5bf3e080-a2c5-11ea-9b1a-9b2b5b2b5b1f.png)
+![Login Page](https://photos.app.goo.gl/zDYGySmaYB8w5pNA7)
+![Register](https://user-images.githubusercontent.com/26361028/83338811-5bf3e080-a2c5-11ea-9b1a-9b2b5b2b5b1f.png)
 ![Screenshot_2020-05-30-22-05-16-01](https://user-images.githubusercontent.com/26361028/83338812-5bf3e080-a2c5-11ea-9b1a-9b2b5b2b5b1f.png)
 ![Screenshot_2020-05-30-22-05-21-01](https://user-images.githubusercontent.com/26361028/83338813-5c8c7700-a2c5-11ea-9b1a-9b2b5b2b5b1f.png)
 ![Screenshot_2020-05-30-22-05-26-01](https://user-images.githubusercontent.com/26361028/83338814-5c8c7700-a2c5-11ea-9b1a-9b2b5b2b5b1f.png)
